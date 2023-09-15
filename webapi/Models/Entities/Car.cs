@@ -18,6 +18,7 @@
 
         public string Description { get; set; }
 
+        public Car() { }
         public Car(Guid id, string brand, string model, int year, string type, string colour, double price, string description)
         {
             Id = id;

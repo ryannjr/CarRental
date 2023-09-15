@@ -12,7 +12,7 @@
         public Guid UserId { get; set; }
         public virtual Customer? Customer { get; set; }
 
-
+        public Rental() { }
         public Rental(Guid id, Guid carId, Guid userId, DateTime startTime, DateTime endTime, Car? car, Customer? customer)
         {
             Id = id;
