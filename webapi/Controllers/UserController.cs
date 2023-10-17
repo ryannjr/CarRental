@@ -19,7 +19,7 @@ namespace webapi.Controllers {
             this._userRepository = userRepository;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetAllUsers() {
             IEnumerable<User> users = await this._userRepository.GetUsers();
             if(users == null) {
@@ -32,7 +32,6 @@ namespace webapi.Controllers {
 
         [HttpGet]
         [Route("{id:Guid}")]
-        [ActionName("GetUserById")]
         public async Task<IActionResult> GetUserById([FromRoute] Guid id) {
 
             var user = await this._userRepository.GetUserByID(id);
@@ -45,7 +44,7 @@ namespace webapi.Controllers {
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> AddUser(User user) {
+        public async Task<IActionResult> AddUser([FromBody] User user) {
             user.Id = Guid.NewGuid();
             await this._userRepository.InsertUser(user);
             return Ok(user);

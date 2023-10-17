@@ -8,6 +8,7 @@ namespace webapi.Business.Abstract {
         Task<User> Register(User userRegisterDTO);
         Task<User> Login(UserLoginDTO userLoginDTO);
 
+        bool Refresh(RefreshTokenDTO refreshTokenDTO);
         Task<bool> UserExists(UserRegisterDTO user);
         
         Task<bool> UserExistsLogin(UserLoginDTO user);

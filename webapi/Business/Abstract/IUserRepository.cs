@@ -8,6 +8,7 @@ namespace webapi.Business.Abstract
     {
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUserByID(Guid userId);
+        Task<User> GetUserByEmail(string Email);
         Task<User> InsertUser(User user);
         /*
         Task<User> UpdateUser(User user);

@@ -7,6 +7,7 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public bool isAdmin {get; set;} = false;
+        public ICollection<Rental> Rentals { get; set; }
 
         public User() { }
         public User(Guid id, string firstName, string lastName, string email, string password){
@@ -15,6 +16,6 @@
             LastName = lastName;
             Email = email;
             Password = password;
-        }
+    }
     }
 }

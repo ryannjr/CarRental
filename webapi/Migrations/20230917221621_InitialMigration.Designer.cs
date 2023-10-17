@@ -12,7 +12,7 @@ using webapi.Contexts;
 namespace webapi.Migrations
 {
     [DbContext(typeof(CarRentalDbContext))]
-    [Migration("20230907100541_InitialMigration")]
+    [Migration("20230917221621_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -56,7 +56,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("webapi.Models.Entities.Car", b =>
@@ -96,42 +96,6 @@ namespace webapi.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("webapi.Models.Entities.CreditCard", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CVV")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CardNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ExpirationMonth")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExpirationYear")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameOnCard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CreditCard");
-                });
-
             modelBuilder.Entity("webapi.Models.Entities.Rental", b =>
                 {
                     b.Property<Guid>("Id")
@@ -141,23 +105,24 @@ namespace webapi.Migrations
                     b.Property<Guid>("CarId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RentalStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("endTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("startTime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
                 });
@@ -168,9 +133,8 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -193,45 +157,9 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("webapi.Models.Entities.Admin", b =>
-                {
-                    b.HasBaseType("webapi.Models.Entities.User");
-
-                    b.HasDiscriminator().HasValue("Admin");
-                });
-
-            modelBuilder.Entity("webapi.Models.Entities.Customer", b =>
-                {
-                    b.HasBaseType("webapi.Models.Entities.User");
-
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasIndex("AddressId");
 
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("webapi.Models.Entities.CreditCard", b =>
-                {
-                    b.HasOne("webapi.Models.Entities.Customer", "Customer")
-                        .WithMany("CreditCards")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("webapi.Models.Entities.Rental", b =>
@@ -242,16 +170,18 @@ namespace webapi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("webapi.Models.Entities.Customer", "Customer")
+                    b.HasOne("webapi.Models.Entities.User", "User")
                         .WithMany("Rentals")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Car");
 
-                    b.Navigation("Customer");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("webapi.Models.Entities.Customer", b =>
+            modelBuilder.Entity("webapi.Models.Entities.User", b =>
                 {
                     b.HasOne("webapi.Models.Entities.Address", "Address")
                         .WithMany()
@@ -262,10 +192,8 @@ namespace webapi.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("webapi.Models.Entities.Customer", b =>
+            modelBuilder.Entity("webapi.Models.Entities.User", b =>
                 {
-                    b.Navigation("CreditCards");
-
                     b.Navigation("Rentals");
                 });
 #pragma warning restore 612, 618

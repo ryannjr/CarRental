@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
 using webapi.Business.Abstract;
+using webapi.Business;
 using webapi.Contexts;
 using webapi.Models.DTO;
 using webapi.Models.Entities;
@@ -10,9 +11,11 @@ namespace webapi.Business.Concrete {
     public class AuthRepository : IAuthRepository {
 
         private CarRentalDbContext _context;
+        private readonly ITokenService _tokenValidator;
 
-        public AuthRepository(CarRentalDbContext context) {
+        public AuthRepository(CarRentalDbContext context, ITokenService tokenValidator) {
             this._context = context;
+            this._tokenValidator = tokenValidator;
         }
 
         public Task<User> Login(UserLoginDTO userLoginDTO) {
@@ -25,8 +28,6 @@ namespace webapi.Business.Concrete {
             await this._context.SaveChangesAsync();
             return result.Entity;
         }
-
-
         public async Task<bool> UserExists(UserRegisterDTO user) {
             var exists = await this._context.Users.Where(u => u.Email == user.Email).FirstOrDefaultAsync();
             return exists != null;
@@ -44,6 +45,10 @@ namespace webapi.Business.Concrete {
                 }
                 return false;
             }
+        }
+
+        public bool Refresh(RefreshTokenDTO refreshTokenDTO) {
+            return this._tokenValidator.VerifyRefreshToken(refreshTokenDTO.RefreshToken);
         }
     }
 }

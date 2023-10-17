@@ -27,6 +27,10 @@ namespace webapi.Business.Concrete
             return await this._context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }
 
+        public async Task<User> GetUserByEmail(string email) {
+            return await this._context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+        }
+
         public async Task<User> InsertUser(User user) {
             var result = await this._context.Users.AddAsync(user);
             await SaveDatabaseChanges();

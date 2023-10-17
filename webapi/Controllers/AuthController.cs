@@ -6,6 +6,8 @@ using System.Diagnostics;
 using Crypt = BCrypt.Net.BCrypt;
 using System.Text.Json.Serialization;
 using webapi.Business.Concrete;
+using webapi.Business.Responses;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace webapi.Controllers
 {
@@ -15,10 +17,12 @@ namespace webapi.Controllers
     public class AuthController : ControllerBase{
 
         private readonly IAuthRepository _authRepository;
+        private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
-        public AuthController(IAuthRepository authRepository, ITokenService tokenService) {
+        public AuthController(IAuthRepository authRepository, ITokenService tokenService, IUserRepository userRepository) {
             this._authRepository = authRepository;
+            this._userRepository = userRepository;
             this._tokenService = tokenService;
         }
 
@@ -66,12 +70,20 @@ namespace webapi.Controllers
                 bool userExists = await this._authRepository.UserExistsLogin(userLoginDTO);
 
                 if(userExists){
-                    string token = this._tokenService.GenerateJWT(userLoginDTO); 
+                    var user = this._userRepository.GetUserByEmail(userLoginDTO.Email).Result;
+
+                    string token = this._tokenService.GenerateJWT(user);
+                    string refreshToken = this._tokenService.GenerateRefreshToken(user);
                     if(token  == null) {
                         return BadRequest();
                     }
 
-                    return Ok(token);
+                    return Ok(new LoginResponse()
+                    {
+                        user = user,
+                        accessToken = token,
+                        refreshToken = refreshToken
+                    }) ;
                 }
                 else {
                     return Unauthorized("Email or Password does not match a User on record.");
@@ -83,6 +95,41 @@ namespace webapi.Controllers
 
         }
 
+        [HttpPost]
+        [Route("verify")]
+        public bool VerifyToken([FromBody] RefreshTokenDTO token) {
+            return _tokenService.VerifyAccessToken(token.RefreshToken);
+        }
+
+        
+        [HttpPost]
+        [Route("refresh")]
+
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDTO refreshTokenDTO) {
+            if (!ModelState.IsValid) { return BadRequest(); }
+
+            bool isValidToken = this._tokenService.VerifyRefreshToken(refreshTokenDTO.RefreshToken);
+            if (!isValidToken) {
+                return BadRequest(new ErrorResponse("Invalid Refresh Token"));
+            }
+            var handler = new JwtSecurityTokenHandler();
+            var decoded = handler.ReadJwtToken(refreshTokenDTO.RefreshToken);
+
+            Guid uID = Guid.Parse(decoded.Claims.First(claim => claim.Type == "userID").Value);
+            User user = await this._userRepository.GetUserByID(uID);
+            
+            // Generate new tokens
+            string accessToken = _tokenService.GenerateJWT(user);
+            string refreshToken = _tokenService.GenerateRefreshToken(user);
+
+            return Ok(new LoginResponse()
+            {
+                user = user,
+                accessToken = accessToken,
+                refreshToken = refreshToken
+            });
+        }
+        
 
     }
 }

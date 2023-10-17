@@ -3,8 +3,11 @@ using webapi.Models.Entities;
 
 namespace webapi.Business.Abstract {
     public interface ITokenService {
-        string GenerateJWT(UserLoginDTO user);
+        string GenerateJWT(User user);
 
-        bool VerifyJWT(string token, string email);
+        string GenerateRefreshToken(User user);
+
+        bool VerifyAccessToken(string token);
+        bool VerifyRefreshToken(string token);
     }
 }
