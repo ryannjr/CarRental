@@ -3,10 +3,14 @@ import Footer from '../components/Footer';
 import axios from 'axios';
 import CarCard from '../components/CarCard';
 import SearchBar from '../components/SearchBar';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Cars = () => {
     const [name, setName] = useState("CARS");
     const [allCars, setAllCars] = useState([]);
+
+    const location = useLocation();
+
 
     useEffect(() => {
         const getAllCars = async() => {
@@ -25,12 +29,12 @@ const Cars = () => {
             </div>
             <div className='flex flex-row overflow-x-auto'>
                 {allCars.filter((item, index) => index <= allCars.length / 2).map((car, index) => 
-                    <CarCard key = {index} Car={car}/>
+                    <CarCard key = {index} Car={car} location = {location.state}/>
                 )}
             </div>
             <div className='flex flex-row overflow-x-auto'>
             {allCars.filter((item, index) => index > allCars.length / 2).map((car, index) => 
-                    <CarCard key = {index} Car={car}/>
+                    <CarCard key = {index} Car={car} location = {location.state}/>
                 )}
             </div>
         </div>

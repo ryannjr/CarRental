@@ -13,9 +13,10 @@
         public double Price { get; set; }
         public string Description { get; set; }
         public bool isRented { get; set; } = false;
-
+        public byte[] Image { get; set; } 
         public Car() { }
-        public Car(Guid id, string brand, string model, int year, string type, string colour, double price, string description, int capacity)
+        public Car(Guid id, string brand, string model, int year, string type, string colour, double price, string description,
+            int capacity, byte[] image)
         {
             Id = id;
             Brand = brand;
@@ -27,6 +28,7 @@
             Colour = colour;
             Price = price;
             Description = description;
+            Image = image;
         }
     }
 }

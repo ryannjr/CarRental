@@ -65,7 +65,7 @@ const RegisterForm = () => {
         }
     }, [errors]);
     return(
-        <div className='mt-36 flex justify-center items-center'>
+        <div className='mt-16 mb-10 flex justify-center items-center'>
             <div className="flex flex-col justify-center items-center border-2 rounded-lg shadow-md w-1/4 py-10">
                 <div>
                     <h1 className="text-2xl font-open font-bold ">Register</h1>

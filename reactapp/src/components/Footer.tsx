@@ -13,7 +13,7 @@ const Footer: FC = () => {
     }
 
     return(
-        <footer className=" bg-THEME-LIGHT_GRAY flex flex-row">
+        <footer className=" bg-THEME-LIGHT_GRAY flex flex-row ">
             <div className="flex justify-center items-center w-1/2 h-24">
                 <h1 className="text-black font-bold font-mukta">© 2023 | AKT Car Rental, Inc. All Rights Reserved.</h1>
             </div>
