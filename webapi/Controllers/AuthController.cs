@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using webapi.Business.Concrete;
 using webapi.Business.Responses;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace webapi.Controllers
 {
@@ -96,12 +97,19 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        [Route("verify")]
-        public bool VerifyToken([FromBody] RefreshTokenDTO token) {
-            return _tokenService.VerifyAccessToken(token.RefreshToken);
+        [Route("verify-access")]
+        public bool VerifyToken([FromBody] AccessTokenDTO token) {
+            return _tokenService.VerifyAccessToken(token.AccessToken);
         }
 
-        
+
+        [HttpPost]
+        [Route("verify-refresh")]
+        public bool VerifyToken([FromBody] RefreshTokenDTO token) {
+            return _tokenService.VerifyRefreshToken(token.RefreshToken);
+        }
+
+
         [HttpPost]
         [Route("refresh")]
 
@@ -129,7 +137,25 @@ namespace webapi.Controllers
                 refreshToken = refreshToken
             });
         }
-        
 
+
+
+        [Authorize]
+        [HttpGet]
+        [Route("test")]
+        public async Task<IActionResult> Test() {
+            return Ok();
+        }
+
+
+
+        /*
+        [Authorize]
+        [HttpDelete]
+        [Route("logout")]
+        public async Task<IActionResult> Logout() {
+            string ID  = 
+        }
+        */
     }
 }

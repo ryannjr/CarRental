@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate, useLocation} from 'react-router-dom';
 
 interface CarProps{
+
     Car: {
         id: number,
         brand: string,
@@ -11,11 +12,12 @@ interface CarProps{
         price: number,
         year: number,
         description: string
-    }
+    },
+    location?: boolean
 
 }
 
-const CarCard = ({Car}: CarProps) => {
+const CarCard = ({Car, location}: CarProps) => {
     return(
         <div>
             <Outlet/>
@@ -39,7 +41,8 @@ const CarCard = ({Car}: CarProps) => {
 
 
                     <div className="flex justify-center mt-8">
-                        <Link to = {`details/${Car.id}`} className="border-gray-950 rounded-sm border-2 bg-white text-black" 
+                        <Link 
+                        to = {`details/${Car.id}`} className="border-gray-950 rounded-sm border-2 bg-white text-black" 
                             >View Details</Link>
                     </div>
                 </div>

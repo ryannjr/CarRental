@@ -5,13 +5,13 @@ interface AuthProps{
     children: JSX.Element,
 }
 
-const AuthPopup = (props: AuthProps) => {
+const AuthPopupLoggedIn = (props: AuthProps) => {
     
     return (
         <>
         {props.reveal ? 
-            <div className="z-10 flex justify-center align-middle items-center">
-                <div className ="flex fixed top-96 z-10 rounded-lg">
+            <div className="z-10 flex">
+                <div className ="z-10">
                     {props.children}
                 </div>
             </div> 
@@ -22,4 +22,4 @@ const AuthPopup = (props: AuthProps) => {
     );
 }
 
-export default AuthPopup;
+export default AuthPopupLoggedIn;

@@ -33,14 +33,33 @@ namespace webapi.Controllers {
             return Ok(rental);
         }
 
+
+        [HttpGet]
+        [Route("get-by-id/{userId:Guid}")]
+        public async Task<IActionResult> GetRentalsByUserId([FromRoute] Guid userId) {
+            var rentals = await this._repository.GetRentalsByUserId(userId);
+            return Ok(rentals);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddRental([FromBody] RentalDTO rental) {
+
+            Rental alreadyExists = await _repository.GetRentalByCarId(rental.CarId);
+
+            /*
+            if (alreadyExists != null) {
+                return BadRequest("Car already exists ");
+            }
+
+            */
             Rental rent = new Rental(Guid.NewGuid(), rental.CarId, rental.UserId, rental.StartTime, rental.EndTime, rental.RentalPrice);
             var newRental = await this._repository.InsertRental(rent);
 
+            /*
             if(newRental == null) {
                 return NotFound("User or Car does not exist");
             }
+            */
             return Ok(newRental);
         }
 

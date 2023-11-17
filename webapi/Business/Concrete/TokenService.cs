@@ -41,7 +41,7 @@ namespace webapi.Business.Concrete {
                 issuer: issuer,
                 audience: audience,
                 notBefore: DateTime.UtcNow,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddMinutes(15),
                 claims: claims,
                 signingCredentials: credentials
                 );
@@ -121,6 +121,7 @@ namespace webapi.Business.Concrete {
                 ValidateIssuerSigningKey = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
+                ClockSkew = TimeSpan.Zero,
 
             };
 

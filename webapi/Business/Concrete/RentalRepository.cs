@@ -20,9 +20,13 @@ namespace webapi.Business.Concrete {
             return await this._context.Rentals.FirstOrDefaultAsync(x => x.Id == id);
 
         }
+        public async Task<Rental> GetRentalByCarId(Guid carId) {
+            return await this._context.Rentals.FirstOrDefaultAsync(x => x.CarId == carId);
 
-        public async Task<Rental> GetRentalByUserId(Guid userId) {
-            return await this._context.Rentals.FirstOrDefaultAsync(r => r.UserId == userId);
+        }
+
+        public async Task<IEnumerable<Rental>> GetRentalsByUserId(Guid userId) {
+            return await this._context.Rentals.Where(r => r.UserId == userId).ToListAsync();
         }
 
         public async Task<Rental> InsertRental(Rental rental) {

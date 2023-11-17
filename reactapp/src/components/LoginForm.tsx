@@ -22,6 +22,7 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState<Errors>();
 
+
     const handleClick = () => {
         const errors = LoginValidator(email, password);
         setErrors(err => ({...err, ...errors}));
@@ -35,8 +36,12 @@ const LoginForm = () => {
 
         try {
             const res = await axios.post("https://localhost:7207/api/auth/login", data);
+            console.log(res.data);
+            window.localStorage.setItem("id", res.data.user.id);
             window.localStorage.setItem("token", res.data.accessToken);
-            setTimeout(() => navigate("/"), 1000);
+            window.localStorage.setItem("refresh", res.data.refreshToken);
+            window.localStorage.setItem("authenticated", "true");
+            setTimeout(() => navigate("/"), 100);
         } catch (err) {
             console.log(err);
         }
@@ -54,7 +59,7 @@ const LoginForm = () => {
     }, [errors])
 
     return(
-        <div className='mt-52 flex justify-center items-center'>
+        <div className='mt-20 mb-44 flex justify-center items-center'>
             <div className="flex flex-col justify-center items-center border-2 rounded-lg shadow-md w-1/4 py-14">
                 <div className='mb-6'>
                     <h1 className="text-2xl font-open font-bold">Login</h1>

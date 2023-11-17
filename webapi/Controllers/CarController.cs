@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.Business.Abstract;
 using webapi.Models.Entities;
+using System;
+using Stripe;
+using webapi.Models.DTO;
 
 namespace webapi.Controllers {
     [ApiController]
@@ -47,19 +50,38 @@ namespace webapi.Controllers {
             if(car == null) {
                 return NotFound();
             }
+
+
             return Ok(car);
 
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AddCar([FromBody] Car car) {
-            if(!(car is Car)) {
+        public async Task<IActionResult> AddCar([FromBody] CarDTO car) {
+            if(!(car is CarDTO)) {
                 return BadRequest();
             }
-            car.Id = Guid.NewGuid();
-            await this._carRepository.InsertCar(car);
-            return Ok(car);
+            Car newCar = new Car();
+            newCar.Year = car.Year;
+            newCar.Colour = car.Colour;
+            newCar.Model = car.Model;
+            newCar.Brand = car.Brand;
+            newCar.Type = car.Type;
+            newCar.Capacity = car.Capacity;
+            newCar.Price = car.Price;
+            newCar.Transmission = car.Transmission;
+            newCar.Description = car.Description;
+            newCar.isRented = car.isRented;
+            newCar.Id = Guid.NewGuid();
+
+            string CAR_IMAGE = string.Format("C:\\Users\\ryan_\\Pictures\\CarImages\\{0}_{1}.png", car.Brand, car.Model);
+            byte[] carImage = System.IO.File.ReadAllBytes(CAR_IMAGE);
+            if(carImage != null) {
+                newCar.Image = carImage;
+            }
+            await this._carRepository.InsertCar(newCar);
+            return Ok(newCar);
 
         }
 

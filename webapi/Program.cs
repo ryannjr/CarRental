@@ -39,7 +39,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "Policies", policy =>
     {
-        policy.WithOrigins("https://localhost:7207/", "https://localhost:5173/")
+        policy.WithOrigins("https://localhost:7207/", "https://localhost:5173/", "https://checkout.stripe.com")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowAnyOrigin();
@@ -60,7 +60,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret_Key"])),
-        ClockSkew = TimeSpan.Zero,
     };
 });
 

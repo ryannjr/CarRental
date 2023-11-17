@@ -7,16 +7,10 @@ import {isJwtValid} from "./requests/authRequests";
 
 
 const App: FC = () => {
-    
-    useEffect(() => {
-        if(localStorage.getItem("token") !== null){
-            isJwtValid(localStorage.getItem("token").toString())
-        }
-    });
 
     return (
         <div className = "bg-DARK_THEME-BACKGROUND">
-            <RouterProvider router={Router} />
+            <RouterProvider router={Router}/>
         </div>
     );
 }
