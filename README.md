@@ -15,6 +15,7 @@ The Car Rental App is a web application that allows users to rent cars, view car
   - ASP.NET Core: Backend framework for building web APIs.
   - Entity Framework Core: Object-relational mapping (ORM) for database interaction.
   - MSSQL: RDBMS for storing car, user and rental data.
+  - Stripe: Payment API used to process and create checkouts for rentals.
 
 - **Frontend:**
   - React: Frontend library for building user interfaces.
@@ -24,5 +25,5 @@ The Car Rental App is a web application that allows users to rent cars, view car
   - JSON Web Tokens (JWT): Token-based authentication for securing API endpoints.
 
 - **Development Tools:**
-  - Visual Studio: Integrated development environment (IDE) for backend development.
+  - Visual Studio: IDE for backend development.
   - Visual Studio Code: IDE for frontend development.
