@@ -2,7 +2,7 @@
 
 The Car Rental App is a web application that allows users to rent cars, view car details, and manage car inventory. This README provides an overview of the app, its features, and instructions for setup and usage.
 
-# Features
+## Features
 - User Authentication: Allows users to create accounts, log in, and manage their profiles.
 - Car Listing: Displays a list of available cars with details such as brand, model, year, and price.
 - Car Details: Provides detailed information about a selected car, including images.
